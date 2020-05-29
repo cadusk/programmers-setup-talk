@@ -1,0 +1,26 @@
+.btn {
+    background-color: #1B6DB4;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    outline:none;
+    height: 5vh;
+    width: 10%;    
+}
+
+.btn-link > a {
+    color: white;
+    text-decoration: none;
+}
+
+.pos-right {
+    margin-top: 1%;
+    margin-right: 9.5%;
+    display: flex;
+    flex-direction: row-reverse;
+}
