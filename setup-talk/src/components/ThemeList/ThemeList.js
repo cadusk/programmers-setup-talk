@@ -1,8 +1,7 @@
 import React from 'react';
 import './ThemeList.css'
 
-//function ThemeList ({theme, description, name, votes}) {
-class ThemeList extends React.Component {
+export default class ThemeList extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -16,9 +15,8 @@ class ThemeList extends React.Component {
   }
 
   render(){
-
   return (
-    <div>
+    <div className="theme">
       <ul>
           <li>
             <div className="list-div card">
@@ -33,10 +31,8 @@ class ThemeList extends React.Component {
               </div>
             </div>
           </li>
-      </ul>
-    </div>
-  );
+        </ul>
+      </div>
+    );
+  }
 }
-}
-
-export default ThemeList;

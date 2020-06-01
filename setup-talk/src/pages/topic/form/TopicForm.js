@@ -4,7 +4,7 @@ export default class TopicForm extends  React.Component {
 
 constructor(props){
     super(props);
-    this.state = {
+    this.state = {  
         name: '',
         email: '',
         topics: [
@@ -53,8 +53,10 @@ handleAddFields () {
 
    handleRemoveFields (index) {
     const values = this.state.topics
-    values.splice(index, 1);
-    this.setState({topics: values});
+    if(values.length > 1 ){
+      values.splice(index, 1);
+      this.setState({topics: values});
+    }
   }
 
   render(){
@@ -85,7 +87,7 @@ handleAddFields () {
           </div>
           <h4 className="form-div ">Sugestões</h4>
         {this.state.topics.map((inputField, index) => (
-          <Fragment className="dynamic" key={`${inputField}~${index}`}>
+          <Fragment key={`${inputField}~${index}`}>
             <div className="dynamic-fields">
             <div className="form-div dynamic-div ">
               <label htmlFor="theme">Tema</label>

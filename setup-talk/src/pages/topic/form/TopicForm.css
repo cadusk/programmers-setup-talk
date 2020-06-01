@@ -18,6 +18,7 @@ input {
     -moz-transition: all 0.30s ease-in-out;
     -ms-transition: all 0.30s ease-in-out;
     -o-transition: all 0.30s ease-in-out;
+    transition: all 0.3s ease-out;
     
     outline: none;
     padding: 3px 0px 3px 3px;
