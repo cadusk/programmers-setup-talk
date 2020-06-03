@@ -12,6 +12,7 @@
     nonroot_user: "vagrant"
     nonroot_user_home: "/home/vagrant"
 
+    docker_compose_version: "1.26.0"
     docker_users: [ "vagrant" ]
 
   roles:
@@ -19,6 +20,6 @@
 
   tasks:
     - name: Start docker-compose services.
-      command: "docker-compose up -d"
+      command: "/usr/local/bin/docker-compose up -d"
       args:
         chdir: /code
