@@ -39,15 +39,26 @@ GET request:
                 "_id": "5ed71c938f49a1034c11521c",
                 "name": "First Topic",
                 "description": "this is the first description",
-                "votes": 1,
+                "votes": 0,
+                "__v": 0
+            },
+            {
+                "_id": "6ed44c938f49a7676c11521c",
+                "name": "Second Topic",
+                "description": "this is the another description",
+                "votes": 0,
                 "__v": 0
             }
     ]
 
+DELETE request:
+    http://localhost:3333/topic/:id
 
-PUT request (To update the Vote of a specific Topic):
-    http://localhost:3333/topic/voteup
-    Parameters: id: string
+    Returns the object of the deleted topic
+
+
+POST request (To update the Vote of a specific Topic):
+    http://localhost:3333/topic/:id/voteup
 
     Return is an json object with all values of the updated topic (vote is automatically increased by 1).
     Example:
@@ -59,15 +70,12 @@ PUT request (To update the Vote of a specific Topic):
         "__v": 0
     }
 
-PUT request (To update the name and description of a topic based on its id):
-    http://localhost:3333/topic/voteup
-    Parameters: id: string
+PATCH request (To update the name and description of a topic based on its id):
+    http://localhost:3333/topic/:id
 
-    Parameters in BODY as raw JSON:
-    {
-        "name": "new topic name",
-        "description": "new description"
-    }
+    Parameters:
+    name: string
+    description: string
 
     Return is an json object with all values of the updated topic.
     Example:
