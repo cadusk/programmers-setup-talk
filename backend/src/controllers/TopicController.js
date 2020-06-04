@@ -7,45 +7,74 @@ module.exports = {
         return response.json({ topics: topics });
     },
 
-    async store (request, response) {
+    store (request, response) {
         const { name, description } = request.query;
-    
-        const topic = await Topic.create({
+        if(!name || !description) {
+            return response.status(400).json({message: 'Parameters name are not correct'})
+        }
+
+        Topic.create({
             name: name,
             description: description,
             votes: 0
+        }).then(newTopic => {
+            return response.json(newTopic);
+        }).catch(err => {
+            return response.status(500).json({message: err})
         });
-        return response.json({topic});
     },
 
     async destroy(request, response) {
-        const { id } = request.query;
-        const topic = await Topic.findByIdAndRemove( { _id: id} );
-        
-        return response.json(topic);
+        const { id } = request.params;
+        const topic = await Topic.findByIdAndRemove( { _id: id} )
+        if (topic) {
+            return response.json(topic);
+        } else {
+            return response.status(404).json({message: 'This id does not exist'})
+        }
     },
 
-    async update(request, response) {
-        const { id } = request.query;
+    async voteUp(request, response) {
+        const { id } = request.params;
         const topic = await Topic.findById( { _id: id} );
-        const { votes } = topic;
 
-        const updatedVote = await Topic.findOneAndUpdate({_id: id}, {votes: votes+1}, {new: true});
-        return response.json(updatedVote);
+        if(topic){
+            const { votes } = topic;
+            Topic.findOneAndUpdate({_id: id}, {votes: votes+1}, {new: true}).then(res => {
+                return response.json(res);
+            }).catch((error) => {
+                response.status(500).json({ message: error.message});
+                });
+        } else {
+            response.status(404).json({message: 'This id does not exist'});
+        }
     },
 
     async updateTopic(request, response ){
-        const { id } = request.query;
+        const { id } = request.params;
         const { name, description } = request.body;
-        const topic = await Topic.findById( { _id: id} );
 
-        const updatedTopic = await Topic.findOneAndUpdate({_id: id}, 
+        if(!name || !description) {
+            return response.status(400).json({message: 'Parameters name are not correct'})
+        }
+
+        const topic = await Topic.findById( { _id: id} );
+        if(topic){
+
+        Topic.findOneAndUpdate({_id: id}, 
             {
                 name: name,
                 description: description
             },
-            {new: true});
-
-        return response.json(updatedTopic)
+            {new: true, })
+            .then(res => {
+                return response.json(res);
+            })
+            .catch(err => {
+                return response.json({message: err})
+            });            
+        } else {
+            response.status(404).json({message: 'This id does not exist'})
+        }
     }
 }
