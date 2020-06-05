@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './Home.css'
 import TopicList from '../../components/TopicList/TopicList';
 import { Link } from 'react-router-dom';
+import { TopicRepo } from '../../repo/topicRepository';
+import { ToastyUtil } from '../../utils/toast';
 
 
 export default function Home () {
@@ -12,9 +14,14 @@ export default function Home () {
 }, []);
 
   const fetchTopics = async() => {
-    const fetchTopics = await fetch('http://localhost:5000/topics');
-    const topicsJson = await fetchTopics.json();
-    setTopics(topicsJson);
+    TopicRepo.get()
+      .then(
+          res => {
+            setTopics({topics: res.data});
+          }, error => {
+            ToastyUtil.errorNotify('Erro ao consultar tópicos.');
+          }
+      );
   }
 
   return (
@@ -25,7 +32,8 @@ export default function Home () {
         </button>
       </div>
       {topics.topics.map(topic => (
-          <TopicList key={`${topic.theme}-${topic.name}`} theme={topic.theme} description={topic.description} name={topic.name} votes={topic.votes} />
+          <TopicList key={`${topic._id}`}
+           id={topic._id} name={topic.name} description={topic.description} votes={topic.votes} />
       ))}
     </div>
   );

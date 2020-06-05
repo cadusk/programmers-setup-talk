@@ -82,6 +82,8 @@ hr {
 
 .card-margin-left {
     margin-left: 1%;
+    text-decoration: none;
+    color: black;
 }
 
 .vote-margin-left {

@@ -1,67 +1,51 @@
-import React,{Fragment}  from 'react';
+import React  from 'react';
 import './TopicForm.css'
 import { Redirect } from "react-router-dom";
-import  { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import { ToastyUtil } from '../../../utils/toast';
+import { TopicRepo } from '../../../repo/topicRepository';
 
 export default class TopicForm extends  React.Component {
 
-constructor(props){
+  constructor(props){
     super(props);
-    this.state = {
-      user: {
-        name: '',
-        email: '',
-        formErrors: {
+      this.state = {
+        user: {
           name: '',
-          email: ''
-        }
-      },
-      topics: [
-           {
-             topic: '', 
-             description: '',
-             formErros: {
-               topic: '',
-               description: ''
-             }
+          email: '',
+          formErrors: {
+            name: '',
+            email: ''
+          }
+        },
+        id: props.match.params.id,
+        topic: {
+          name: '', 
+          description: '',
+          formErrors: {
+            name: '',
+            description: ''
            }
-       ],
+        },
         redirect: null,
     }
-
-    toast.configure();
+    
     this.handleSubmit = this.handleSubmit.bind(this);
-}
-
-
- successNotify(message) {
-    toast.success(message, this.getNotifyConfigurationObject());
   }
 
-  errorNotify(message) {
-    toast.error(message, this.getNotifyConfigurationObject());
-  }
-
-  getNotifyConfigurationObject() {
-    return {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      };
+  componentDidMount() {
+    if(this.state.id){
+      this.getTopic(this.state.id);
+    }
   }
 
   handleStaticFormChange(event) {
 
     const {name, value}  = event.target;
     
-    const user = this.validateUserForm(name, value)
+    const topic = this.validateTopicForm(name, value)
 
-    this.setState({user: user});
+    this.setState({topic: topic});
   }
 
   validateUserForm(name, value) {
@@ -82,42 +66,27 @@ constructor(props){
 
       default: break;
     }
-    console.log('user', user);
     return user;
   }
 
-  handleDynamicInputChange(index, event){
+  validateTopicForm(name, value) {
 
-    const {name, value}  = event.target;
-
-    let topics = this.validateTopicForm(name, value, index);
-
-    this.setState({topics: topics});
-
-  }
-
-  validateTopicForm(name, value,index) {
-
-    let topic = this.state.topics[index];;
+    let topic = this.state.topic;
 
     switch(name) {
-      case 'topic':
-        topic.topic = value;
-        topic.formErros.topic = value.length <= 0 ? 'Tópico é obrigatório': '';
+      case 'name':
+        topic.name = value;
+        topic.formErrors.name = value.length <= 0 ? 'Tópico é obrigatório': '';
       break;
 
       case 'description': 
         topic.description = value;
-        topic.formErros.description =  value.length <= 0 ? 'Descrição é obrigatória': ''
+        topic.formErrors.description =  value.length <= 0 ? 'Descrição é obrigatória': ''
       break;
 
       default: break;
     }
-
-    let topics = this.state.topics;
-    topics[index] = topic;
-
-    return topics;
+    return topic;
   }
 
   validateFormErrors (formValues) {
@@ -128,162 +97,113 @@ constructor(props){
 
    handleSubmit(e) {
     e.preventDefault();
-    let isValidTopicForm = true;
-    const isValidUserForm = this.validateFormErrors(this.state.user.formErrors);
+    const isValidTopicForm = this.validateFormErrors(this.state.topic.formErrors);
+    let topic = this.state.topic
 
-    this.state.topics.map(topic => {
-     if(!this.validateFormErrors(topic.formErros)){
-      isValidTopicForm = false;
-     }
-    });
-
-    if(isValidUserForm && isValidTopicForm){
-     this.fetchForm();
-    } else {
-      this.errorNotify('Verifique os campos por favor.')
-    }
-  }
-
-  fetchForm() {
-    const URL = 'http://localhost:5000/topics';
-    const REQUEST = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.state)
-    };
-
-     fetch(URL,REQUEST).then(
-      res => {
-        if(res.status === 200) {
-          this.successNotify('Sugestões salvas!');
-          this.setState({redirect: '/'})
-        } 
-        else if(res.status === 500) {
-          this.errorNotify('Erro ao salvar sugestões!');
-        }
+    if(isValidTopicForm){
+      if(this.state.id){
+        topic.id = this.state.id
+        this.putForm(topic);
+      }else {
+        this.postForm(topic);
       }
-    );
-  }
-
-
-  handleAddFields () {
-    const values = this.state.topics
-    values.push({ topic: '', description: '',formErros: {topic: '', description: ''} })
-    this.setState({topics: values})
-  }
-
-   handleRemoveFields (index) {
-    const values = this.state.topics
-    if(values.length > 1 ){
-      values.splice(index, 1);
-      this.setState({topics: values});
+    } else {
+      ToastyUtil.errorNotify('Verifique os campos por favor.')
     }
+  }
+
+  putForm(data) {
+
+    TopicRepo.edit(data)
+      .then(
+        res => {
+            ToastyUtil.successNotify('Sugestão editada!')
+            this.setState({redirect: '/'})  
+        }, error => {
+          ToastyUtil.errorNotify('Erro ao editar sugestão.');
+        }
+      );
+  }
+
+  postForm(data) {
+
+    TopicRepo.add(data)
+      .then(
+        res => {
+            ToastyUtil.successNotify('Sugestão salva!')
+            this.setState({redirect: '/'})  
+        }, error => {
+          ToastyUtil.errorNotify('Erro ao salvar sugestão!');
+        }
+      );
+  }
+
+  getTopic(id) {
+
+    TopicRepo.getById(id)
+      .then(
+        res => {
+          let data = res.data;
+          let topic = {
+            id: data._id,
+            name: data.name,
+            description: data.description,
+            formErrors: {name: '', description: ''}
+          }
+          this.setState({topic: topic});
+        }, error => {
+          ToastyUtil.errorNotify('Erro ao consultar tópico.');
+
+          let data = {_id: 1, name: 'nome', description: 'descricao'};
+          let topic = {
+            id: data._id,
+            name: data.name,
+            description: data.description,
+            formErrors: {name: '', description: ''}
+          }
+          this.setState({topic: topic});
+        }
+      );
   }
 
   render(){
     if(this.state.redirect) {
       return <Redirect to={this.state.redirect} />
     }
-    const user  = this.state.user;
-    const topics = this.state.topics;
+    const topic = this.state.topic;
+
     return (
       <>
         <form onSubmit={this.handleSubmit}>
           <div>
             <div className="form-div">
-              <label htmlFor="name">Nome </label>
+              <label htmlFor="name">Tópico </label>
               <input
                 type="text"
                 id="name"
                 name="name"
-                className="form__input"
-                value={this.state.user.name}
+                value={this.state.topic.name}
                 onChange={(event) => this.handleStaticFormChange(event)}
               />
-              {user.name.length > 0 && (
-                <span className="error">{user.formErrors.name}</span>
+              {topic.name.length >= 0 && (
+                <span className="error">{topic.formErrors.name}</span>
               )}
               <br></br>
             </div>
             <div className="form-div">
-              <label htmlFor="email">E-mail </label>
+              <label htmlFor="description">Descrição </label>
               <input
                 type="text"
-                id="email"
-                name="email"
-                value={this.state.user.email}
+                id="description"
+                name="description"
+                value={this.state.topic.description}
                 onChange={(event) => this.handleStaticFormChange(event)}
               />
-              
-              {user.email.length >= 0 && (
-                <span className="error">{user.formErrors.email}</span>
+              {topic.description.length >= 0 && (
+                <span className="error">{topic.formErrors.description}</span>
               )}
               <br></br>
             </div>
-            <h4 className="form-div ">Sugestões</h4>
-            {this.state.topics.map((inputField, index) => (
-              <Fragment key={`${inputField}~${index}`}>
-                <div className="dynamic-fields">
-                  <div className="form-div dynamic-div ">
-                    <label htmlFor="topic">Tópico</label>
-                    <input
-                      type="text"
-                      id="topic"
-                      name="topic"
-                      className="input-dynamic"
-                      value={inputField.topic}
-                      onChange={(event) =>
-                        this.handleDynamicInputChange(index, event)
-                      }
-                    />
-                    {topics[index].topic.length >= 0 && (
-                      <span className="error">
-                        {topics[index].formErros.topic}
-                      </span>
-                    )}
-                    <br></br>
-                  </div>
-                  <div className="form-div dynamic-div">
-                    <label htmlFor="description">Descrição</label>
-                    <input
-                      type="text"
-                      id="description"
-                      name="description"
-                      className="input-dynamic"
-                      value={inputField.description}
-                      onChange={(event) =>
-                        this.handleDynamicInputChange(index, event)
-                      }
-                    />
-                    {topics[index].description.length >= 0 && (
-                      <span className="error">
-                        {topics[index].formErros.description}
-                      </span>
-                    )}
-                    <br></br>
-                  </div>
-                  <div className="form-div display-buttons ">
-                    <button
-                      className="btn-dynamic"
-                      type="button"
-                      onClick={() => this.handleRemoveFields(index)}
-                    >
-                      -
-                    </button>
-                    <button
-                      className="btn-dynamic"
-                      type="button"
-                      onClick={() => this.handleAddFields()}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              </Fragment>
-            ))}
           </div>
           <div className="submit-button margin-div">
             <button
