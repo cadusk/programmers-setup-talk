@@ -95,10 +95,23 @@ export default class TopicForm extends  React.Component {
     return valid;
   }
 
-   handleSubmit(e) {
-    e.preventDefault();
+  validateForm(topic) {
+
+    Object.keys(topic).forEach(
+      key => {
+        this.setState({topic: this.validateTopicForm(key, topic[key])});
+      }
+    );
+
     const isValidTopicForm = this.validateFormErrors(this.state.topic.formErrors);
-    let topic = this.state.topic
+
+    return isValidTopicForm
+  }
+
+   handleSubmit(e) {  
+    e.preventDefault();
+    let topic = { name: this.state.topic.name, description: this.state.topic.description }
+    const isValidTopicForm = this.validateForm(topic);
 
     if(isValidTopicForm){
       if(this.state.id){
@@ -125,7 +138,7 @@ export default class TopicForm extends  React.Component {
       );
   }
 
-  postForm(data) {
+  postForm(data){
 
     TopicRepo.add(data)
       .then(
@@ -133,7 +146,7 @@ export default class TopicForm extends  React.Component {
             ToastyUtil.successNotify('Sugestão salva!')
             this.setState({redirect: '/'})  
         }, error => {
-          ToastyUtil.errorNotify('Erro ao salvar sugestão!');
+          ToastyUtil.errorNotify('Erro ao salvar sugestão.');
         }
       );
   }
@@ -153,20 +166,12 @@ export default class TopicForm extends  React.Component {
           this.setState({topic: topic});
         }, error => {
           ToastyUtil.errorNotify('Erro ao consultar tópico.');
-
-          let data = {_id: 1, name: 'nome', description: 'descricao'};
-          let topic = {
-            id: data._id,
-            name: data.name,
-            description: data.description,
-            formErrors: {name: '', description: ''}
-          }
-          this.setState({topic: topic});
         }
       );
   }
 
   render(){
+
     if(this.state.redirect) {
       return <Redirect to={this.state.redirect} />
     }

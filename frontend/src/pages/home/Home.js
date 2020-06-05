@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Home.css'
 import TopicList from '../../components/TopicList/TopicList';
 import { Link } from 'react-router-dom';
@@ -6,35 +6,50 @@ import { TopicRepo } from '../../repo/topicRepository';
 import { ToastyUtil } from '../../utils/toast';
 
 
-export default function Home () {
-  const [topics, setTopics] = useState({topics: []});
+export default class Home extends React.Component {
 
-  useEffect(() => {
-    fetchTopics();
-}, []);
+  constructor(props) {
+    super(props);
+    this.state = {
+      topics: []
+    }
+    this.getTopics = this.getTopics.bind(this);
+    this.updateTopics = this.updateTopics.bind(this);
 
-  const fetchTopics = async() => {
+  }
+
+  componentDidMount() {
+    this.getTopics();
+  }
+
+   getTopics() {
     TopicRepo.get()
       .then(
           res => {
-            setTopics({topics: res.data});
+            this.setState({topics: res.data.topics})
           }, error => {
             ToastyUtil.errorNotify('Erro ao consultar tópicos.');
           }
       );
   }
 
-  return (
+  updateTopics(topics)  {
+    this.setState({topics: topics})
+}
+
+  render() {
+    return(
     <div>
       <div className="pos-right">
       <button className='btn btn-link'>
       <Link to="/topics/" >Sugerir tema</Link>
         </button>
       </div>
-      {topics.topics.map(topic => (
-          <TopicList key={`${topic._id}`}
-           id={topic._id} name={topic.name} description={topic.description} votes={topic.votes} />
-      ))}
-    </div>
-  );
+        {this.state.topics.map(topic => (
+          <TopicList key={`${topic._id}`} onTopicList = {this.updateTopics}
+           id={topic._id} name={topic.name} description={topic.description} votes={topic.votes} topics={this.state.topics}/>
+        ))}
+      </div>
+    );
+  }
 }

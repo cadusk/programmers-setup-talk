@@ -8,8 +8,18 @@ export default class TopicRepository extends Repository {
     }
 
     addVote(id) {
-        const url = `${this.url}/${id}/vote`
+        const url = `${this.url}/${id}/voteup`
         return Axios.post(url);
+    }
+
+    add(data) {
+        const url = `${this.url}?name=${data.name}&description=${data.description}`;
+        return Axios.post(url, data);
+    }
+
+    edit(data) {
+        const url = `${this.url}/${data.id}`;
+        return Axios.patch(url, data);
     }
 }
 

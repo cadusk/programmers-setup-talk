@@ -10,6 +10,7 @@ export default class TopicList extends React.Component {
     this.state = {
       id: this.props.id,
       votes: this.props.votes,
+      topics: this.props.topics
     }
     this.incrementVote = this.incrementVote.bind(this);
   }
@@ -17,10 +18,16 @@ export default class TopicList extends React.Component {
   incrementVote(id){
     TopicRepo.addVote(id).then(
       res => {
+        this.setState({votes: this.state.votes + 1})
       },error => {
         ToastyUtil.errorNotify('Erro ao realizar voto.')
       }
     );
+  }
+
+  updateTopicList() {
+    let topic = this.state.topics;
+    this.props.onTopicList(topic);            
   }
 
   delete(id){
@@ -28,6 +35,11 @@ export default class TopicList extends React.Component {
     .then(
       res => {
         ToastyUtil.successNotify('Exclusão realizada!')
+        let topics = this.state.topics;
+        let index = topics.findIndex( x => x._id === id);
+        topics.splice(index,1)
+        this.setState({topics: topics});
+        this.updateTopicList();
       },error => {
         ToastyUtil.errorNotify('Erro ao realizar exclusão.')
       }
