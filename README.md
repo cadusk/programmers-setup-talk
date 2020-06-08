@@ -28,8 +28,9 @@ $ yarn dev
 
 ### POST request:
 - http://localhost:3333/topics
+
+**Parameters:**
 ```
-**Parameters:** 
 name: string
 description: string
 ```
@@ -82,8 +83,9 @@ Returns the object of the deleted topic
 
 ### PATCH request (To update the name and description of a topic based on its id):
 - http://localhost:3333/topic/:id
-```
+
 **Parameters:**
+```
 name: string
 description: string
 
