@@ -52,7 +52,7 @@ export default class TopicList extends React.Component {
       <ul>
           <li>
             <div className="list-div card">
-              <Link className="card-margin-left" to={`/topics/${this.props.id}`}>
+              <Link className="card-margin-left" to={`/topics/${this.props.id}?name=${this.props.name}&description=${this.props.description}`}>
                 <h2>{this.props.name}</h2> 
               </Link>
               <p className="card-margin-left" >{this.props.description}</p>

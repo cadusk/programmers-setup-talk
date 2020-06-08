@@ -14,7 +14,7 @@ export default function App() {
        <Switch>
         <Route path="/" exact component={Home}/>
         <Route path="/topics" exact component={TopicForm}/>
-        <Route path="/topics/:id" exact component={TopicForm}/>
+        <Route path="/topics/:id"  component={TopicForm}/>
       </Switch>  
         </Router>
     </div>

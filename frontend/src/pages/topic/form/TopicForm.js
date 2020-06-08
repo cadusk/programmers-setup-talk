@@ -4,11 +4,13 @@ import { Redirect } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastyUtil } from '../../../utils/toast';
 import { TopicRepo } from '../../../repo/topicRepository';
+const queryString = require('query-string');
 
 export default class TopicForm extends  React.Component {
 
   constructor(props){
     super(props);
+    let query = queryString.parse(this.props.location.search)
       this.state = {
         user: {
           name: '',
@@ -20,8 +22,8 @@ export default class TopicForm extends  React.Component {
         },
         id: props.match.params.id,
         topic: {
-          name: '', 
-          description: '',
+          name: query.name ? query.name : '', 
+          description: query.description ? query.description : '',
           formErrors: {
             name: '',
             description: ''
@@ -31,12 +33,6 @@ export default class TopicForm extends  React.Component {
     }
     
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    if(this.state.id){
-      this.getTopic(this.state.id);
-    }
   }
 
   handleStaticFormChange(event) {
@@ -151,24 +147,6 @@ export default class TopicForm extends  React.Component {
       );
   }
 
-  getTopic(id) {
-
-    TopicRepo.getById(id)
-      .then(
-        res => {
-          let data = res.data;
-          let topic = {
-            id: data._id,
-            name: data.name,
-            description: data.description,
-            formErrors: {name: '', description: ''}
-          }
-          this.setState({topic: topic});
-        }, error => {
-          ToastyUtil.errorNotify('Erro ao consultar tópico.');
-        }
-      );
-  }
 
   render(){
 
