@@ -60,14 +60,14 @@ Example of return:
 ```
 
 ### DELETE request:
-- http://localhost:3333/topic/:id
+- http://localhost:3333/topics/:id
 ```
 Returns the object of the deleted topic
 ```
 
 
 ### POST request (To update the Vote of a specific Topic):
-- http://localhost:3333/topic/:id/voteup
+- http://localhost:3333/topics/:id/voteup
 
 ```
     Return is an json object with all values of the updated topic (vote is automatically increased by 1).
@@ -82,7 +82,7 @@ Returns the object of the deleted topic
 ```
 
 ### PATCH request (To update the name and description of a topic based on its id):
-- http://localhost:3333/topic/:id
+- http://localhost:3333/topics/:id
 
 **Parameters:**
 ```
