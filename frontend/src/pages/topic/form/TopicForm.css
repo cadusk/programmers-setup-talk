@@ -55,11 +55,16 @@ input {
   }
 
   .display-buttons {
-      display: contents;
+      display: flex;
+      flex-direction: row;
   }
 
   .btn-submit {
       width: 6%;
+  }
+  
+  .btn-margin-left {
+    margin-left: 2%;
   }
 
   .btn-dynamic {
@@ -74,5 +79,14 @@ input {
   .error {
     color:red;
   }
+
+ 
+
+  .btn-link {
+    text-decoration: none;
+    text-align: center;
+    line-height: 30px;
+    width: 6%;
+}
 
   

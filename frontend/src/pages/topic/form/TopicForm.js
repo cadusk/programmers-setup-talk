@@ -1,6 +1,6 @@
 import React  from 'react';
 import './TopicForm.css'
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastyUtil } from '../../../utils/toast';
 import { TopicRepo } from '../../../repo/topicRepository';
@@ -96,34 +96,37 @@ export default class TopicForm extends  React.Component {
         onSubmit={(this.values,this.handleSubmit)}
       >
         {({ values, errors, touched,  isSubmitting, isValidating  }) => (
-        <Form>
-          <div>
-            <div className="form-div">
+            <Form >
+              <div>
+                <div className="form-div">
 
-              <label htmlFor="name">Tópico </label>
-              <Field name="name" type="text"/>
-              <label className="error">
-                <ErrorMessage name="name" className="error" />
-              </label>
+                  <label htmlFor="name">Tópico </label>
+                  <Field name="name" type="text"/>
+                  <label className="error">
+                    <ErrorMessage name="name" className="error" />
+                  </label>
 
-              <label htmlFor="name">Descrição</label>
-              <Field name="description" type="text"/>
-              <span className="error">
-                <ErrorMessage name="description"  />
-              </span>
+                  <label htmlFor="name">Descrição</label>
+                  <Field name="description" type="text"/>
+                  <span className="error">
+                    <ErrorMessage name="description"  />
+                  </span>
 
-            </div>
-          </div>
-          <div className="submit-button margin-div">
-            <button
-              disabled={isSubmitting || isValidating}
-              className="btn btn-submit"
-              type="submit"
-              onSubmit={this.handleSubmit}>
-              Salvar
-            </button>
-          </div>
-      </Form>
+                </div>
+              </div>
+              <br></br>
+              <div className="submit-button display-buttons margin-div">
+                <Link to="/" className="btn btn-link"> Voltar </Link>
+                <button
+                  disabled={isSubmitting || isValidating}
+                  className="btn btn-submit btn-margin-left"
+                  type="submit"
+                  onSubmit={this.handleSubmit}>
+                  Salvar
+                </button>
+                <br></br>
+              </div>
+          </Form>
           )}
       </Formik>
     );
