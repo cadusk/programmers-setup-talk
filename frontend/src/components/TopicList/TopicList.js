@@ -30,16 +30,23 @@ export default class TopicList extends React.Component {
     this.props.onTopicList(topic);            
   }
 
+  removeTopicFromState(id) {
+    let topics = this.state.topics;
+    let index = topics.findIndex( x => x._id === id);
+
+    topics.splice(index,1)
+
+    this.setState({topics: topics});
+
+  this.updateTopicList();
+  }
+
   delete(id){
     TopicRepo.remove(id)
     .then(
       res => {
         ToastyUtil.successNotify('Exclusão realizada!')
-        let topics = this.state.topics;
-        let index = topics.findIndex( x => x._id === id);
-        topics.splice(index,1)
-        this.setState({topics: topics});
-        this.updateTopicList();
+        this.removeTopicFromState(id);
       },error => {
         ToastyUtil.errorNotify('Erro ao realizar exclusão.')
       }
