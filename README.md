@@ -17,49 +17,59 @@ If all went well, by the end of the execution you should be able to mongodb by
 connecting to localhost:27017. For details about database name and credentials,
 refer to configuration files in `db/` folder.
 
-#BACK-END SETUP
-Considering that the "vagrant up" has been completed and DB is up and running, run the following commands:
-
+# BACK-END SETUP
+## Follow "Required software" instructions
+- Considering that the "vagrant up" has been completed and DB is up and running, run the following commands:
+```
 $ cd backend
 $ npm install
 $ yarn dev
+```
 
-POST request:
-    http://localhost:3333/topics
-    Parameters: name: string
-                description: string
+### POST request:
+- http://localhost:3333/topics
 
-GET request:
-    http://localhost:3333/topics
+**Parameters:**
+```
+name: string
+description: string
+```
 
-    Example of return:
-    [
-        "topics": 
-            {
-                "_id": "5ed71c938f49a1034c11521c",
-                "name": "First Topic",
-                "description": "this is the first description",
-                "votes": 0,
-                "__v": 0
-            },
-            {
-                "_id": "6ed44c938f49a7676c11521c",
-                "name": "Second Topic",
-                "description": "this is the another description",
-                "votes": 0,
-                "__v": 0
-            }
-    ]
+### GET request:
+- http://localhost:3333/topics
 
-DELETE request:
-    http://localhost:3333/topic/:id
+```
+Example of return:
+[
+    "topics": 
+        {
+            "_id": "5ed71c938f49a1034c11521c",
+            "name": "First Topic",
+            "description": "this is the first description",
+            "votes": 0,
+            "__v": 0
+        },
+        {
+            "_id": "6ed44c938f49a7676c11521c",
+            "name": "Second Topic",
+            "description": "this is the another description",
+            "votes": 0,
+            "__v": 0
+        }
+]
+```
 
-    Returns the object of the deleted topic
+### DELETE request:
+- http://localhost:3333/topics/:id
+```
+Returns the object of the deleted topic
+```
 
 
-POST request (To update the Vote of a specific Topic):
-    http://localhost:3333/topic/:id/voteup
+### POST request (To update the Vote of a specific Topic):
+- http://localhost:3333/topics/:id/voteup
 
+```
     Return is an json object with all values of the updated topic (vote is automatically increased by 1).
     Example:
     {
@@ -69,20 +79,35 @@ POST request (To update the Vote of a specific Topic):
         "votes": 8,
         "__v": 0
     }
+```
 
-PATCH request (To update the name and description of a topic based on its id):
-    http://localhost:3333/topic/:id
+### PATCH request (To update the name and description of a topic based on its id):
+- http://localhost:3333/topics/:id
 
-    Parameters:
-    name: string
-    description: string
+**Parameters:**
+```
+name: string
+description: string
 
-    Return is an json object with all values of the updated topic.
-    Example:
-    {
-        "_id": "5ed71c938f49a1034c11521c",
-        "name": "New name",
-        "description": "rrr",
-        "votes": 8,
-        "__v": 0
-    }
+
+Return is an json object with all values of the updated topic.
+Example:
+{
+    "_id": "5ed71c938f49a1034c11521c",
+    "name": "New name",
+    "description": "rrr",
+    "votes": 8,
+    "__v": 0
+}
+```
+
+
+# FRONT-END SETUP
+## Follow "Required software" and "BACK-END SETUP" instructions.
+- Considering both have been done, run following commands:
+
+```
+$ cd frontend
+$ npm install
+$ npm start
+```
