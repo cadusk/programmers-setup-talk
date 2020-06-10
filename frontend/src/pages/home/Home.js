@@ -1,13 +1,15 @@
-import { React, TopicList, Link, ToastyUtil, TopicRepo } from "./index";
+import { React, TopicList, Redirect, ToastyUtil, TopicRepo, Button } from "./index";
 
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       topics: [],
+      redirect: null,
     };
     this.getTopics = this.getTopics.bind(this);
     this.updateTopics = this.updateTopics.bind(this);
+    this.gotToTopicForm = this.gotToTopicForm.bind(this);
   }
 
   componentDidMount() {
@@ -25,18 +27,24 @@ export default class Home extends React.Component {
     );
   }
 
+  gotToTopicForm() {
+    this.setState({ redirect: "/topics/" });
+  }
+
   updateTopics(topics) {
     this.setState({ topics: topics });
   }
 
   render() {
+    
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />;
+    }
+
     return (
       <div>
         <div className="pos-right">
-          <Link className="btn btn-link" to="/topics/">
-            {" "}
-            Sugerir tópico{" "}
-          </Link>
+          <Button label="Sugerir tópico" onClick={this.gotToTopicForm} type="button" />
         </div>
         {this.state.topics.map((topic) => (
           <TopicList

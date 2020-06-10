@@ -2,7 +2,7 @@ ul {
     list-style: none;
 }
 
-.list-div {
+.card {
     width: 90%;
     background: white;
     display: flex;
@@ -11,17 +11,13 @@ ul {
     align-items: baseline;
 }
 
-.list-div>h3 {
-    margin: 0px;
-}
-
-.vote {
+.aling-icon {
     white-space: nowrap;
     display: flex;
     flex-direction: row;
 }
 
-.vote-count {
+.icon-position {
     align-items: end;
     justify-content: end;
     justify-self: end;
@@ -29,55 +25,24 @@ ul {
     left: 75vw;
 }
 
-.vote-name {
-    white-space: nowrap;
-}
-
-.btn-vote {
-    background-color: transparent;
-    border: none;
-    color: #5DC347;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    outline: none;
+.vote-counter{
+    top: -1vh;
 }
 
 hr {
     width: 50%;
 }
 
-.material-icons {
-    font-family: 'Material Icons';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;
-    display: inline-block;
-    line-height: 1;
-    text-transform: none;
-    letter-spacing: normal;
-    word-wrap: normal;
-    white-space: nowrap;
-    direction: ltr;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: 'liga';
-}
-
-.card {
+.card-shadow {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
 }
 
-.card:hover {
+.card-shadow:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
-.card-margin-left {
+.card-text {
     margin-left: 1%;
     text-decoration: none;
     color: black;

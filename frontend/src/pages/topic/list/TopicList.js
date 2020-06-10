@@ -1,4 +1,4 @@
-import { React, Link, ToastyUtil, TopicRepo } from "./index";
+import { React, Link, ToastyUtil, TopicRepo, ButtonIcon } from "./index";
 
 export default class TopicList extends React.Component {
   constructor(props) {
@@ -55,28 +55,19 @@ export default class TopicList extends React.Component {
       <div>
         <ul>
           <li>
-            <div className="list-div card">
+            <div className="card card-shadow">
               <Link
-                className="card-margin-left"
+                className="card-text"
                 to={`/topics/${this.props.id}?name=${this.props.name}&description=${this.props.description}`}
               >
                 <h2>{this.props.name}</h2>
               </Link>
-              <p className="card-margin-left">{this.props.description}</p>
-              <div className="vote">
-                <button
-                  className="vote-count btn-vote"
-                  onClick={() => this.incrementVote(this.props.id)}
-                >
-                  <i className="material-icons">thumb_up</i>
-                </button>
-                <p className="vote-count">{this.state.votes}</p>
-                <button
-                  className="vote-count btn-vote"
-                  onClick={() => this.delete(this.props.id)}
-                >
-                  <i className="material-icons">delete</i>
-                </button>
+              <p className="card-text">{this.props.description}</p>
+              <div className="aling-icon">
+                <ButtonIcon className="icon-position " onClick={() => this.incrementVote(this.props.id)} color="#5DC347"iconName="thumb_up"/>
+
+                <p className="vote-counter icon-position">{this.state.votes}</p>
+                <ButtonIcon className="icon-position" onClick={() => this.delete(this.props.id)} color="#FF0000" iconName="delete"/>
               </div>
             </div>
           </li>

@@ -1,24 +1,3 @@
-.btn {
-    background-color: #1B6DB4;
-    border: none;
-    color: white;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    outline: none;
-    height: 5vh;
-    padding: 0 1%;
-    width: auto;
-}
-
-.btn-link {
-    color: white;
-    text-decoration: none;
-}
-
 .pos-right {
     margin-top: 1%;
     margin-right: 9.5%;
