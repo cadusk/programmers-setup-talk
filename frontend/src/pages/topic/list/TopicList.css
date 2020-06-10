@@ -1,4 +1,4 @@
-ul{
+ul {
     list-style: none;
 }
 
@@ -11,15 +11,16 @@ ul{
     align-items: baseline;
 }
 
-.list-div > h3 {
+.list-div>h3 {
     margin: 0px;
 }
 
 .vote {
     white-space: nowrap;
     display: flex;
-    flex-direction: row;    
+    flex-direction: row;
 }
+
 .vote-count {
     align-items: end;
     justify-content: end;
@@ -42,7 +43,7 @@ ul{
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
-    outline:none;
+    outline: none;
 }
 
 hr {
@@ -61,24 +62,20 @@ hr {
     word-wrap: normal;
     white-space: nowrap;
     direction: ltr;
-  
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-  
     -moz-osx-font-smoothing: grayscale;
-  
     font-feature-settings: 'liga';
-  }
+}
 
-  .card {
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
- 
-  }
-  
-  .card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-  }
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
 
 .card-margin-left {
     margin-left: 1%;
