@@ -36,11 +36,11 @@ export default class TopicForm extends React.Component {
 
   putForm(data) {
     TopicRepo.edit(data).then(
-      (res) => {
+      () => {
         ToastyUtil.successNotify("Sugestão editada!");
         this.goToHome();
       },
-      (error) => {
+      () => {
         ToastyUtil.errorNotify("Erro ao editar sugestão.");
       }
     );
@@ -48,11 +48,11 @@ export default class TopicForm extends React.Component {
 
   postForm(data) {
     TopicRepo.add(data).then(
-      (res) => {
+      () => {
         ToastyUtil.successNotify("Sugestão salva!");
         this.goToHome();
       },
-      (error) => {
+      () => {
         ToastyUtil.errorNotify("Erro ao salvar sugestão.");
       }
     );

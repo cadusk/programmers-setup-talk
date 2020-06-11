@@ -14,9 +14,9 @@ export default class TopicList extends React.Component {
   incrementVote(id) {
     TopicRepo.addVote(id).then(
       (res) => {
-        this.setState({ votes: this.state.votes + 1 });
+        this.setState({ votes: res.data.votes });
       },
-      (error) => {
+      () => {
         ToastyUtil.errorNotify("Erro ao realizar voto.");
       }
     );
@@ -40,11 +40,11 @@ export default class TopicList extends React.Component {
 
   delete(id) {
     TopicRepo.remove(id).then(
-      (res) => {
+      () => {
         ToastyUtil.successNotify("Exclusão realizada!");
         this.removeTopicFromState(id);
       },
-      (error) => {
+      () => {
         ToastyUtil.errorNotify("Erro ao realizar exclusão.");
       }
     );

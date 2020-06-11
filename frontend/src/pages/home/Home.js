@@ -21,7 +21,7 @@ export default class Home extends React.Component {
       (res) => {
         this.setState({ topics: res.data.topics });
       },
-      (error) => {
+      () => {
         ToastyUtil.errorNotify("Erro ao consultar tópicos.");
       }
     );
