@@ -1,5 +1,19 @@
-import { 
-  React, Redirect, ToastyUtil, TopicRepo, Yup, Form, Formik,TextField, Button, QueryString
+import {
+  React,
+  Redirect,
+  ToastyUtil,
+  TopicRepo,
+  Yup,
+  Form,
+  Formik,
+  TextField,
+  Button,
+  Grid,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+  QueryString,
 } from "./index";
 
 export default class TopicForm extends React.Component {
@@ -25,7 +39,6 @@ export default class TopicForm extends React.Component {
 
   handleSubmit(values) {
     let topic = values;
-
     if (this.state.id) {
       topic.id = this.state.id;
       this.putForm(topic);
@@ -88,27 +101,66 @@ export default class TopicForm extends React.Component {
     }
 
     return (
-      <Formik
-        initialValues={this.getFormInitialValues()}
-        validationSchema={this.getValidationSchema()}
-        onSubmit={(this.values, this.handleSubmit)}
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: "80vh" }}
       >
-        {() => (
-          <Form>
-            <div>
-              <div className="form-grid">
-                <TextField  name="name" label="Tópico" />
-                <TextField name="description" label="Descrição" />
-              </div>
-            </div>
-            <br></br>
-            <div className="display-buttons">
-              <Button onClick={this.goToHome} label="Voltar" type="button"/>
-              <Button label="Salvar" type="submit"/>
-            </div>
-          </Form>
-        )}
-      </Formik>
+        <Grid item xs={12}>
+          <Formik
+            initialValues={this.getFormInitialValues()}
+            validationSchema={this.getValidationSchema()}
+            onSubmit={(this.values, this.handleSubmit)}
+          >
+            {() => (
+              <Form>
+                <Card>
+                  <Grid container>
+                    <Typography
+                      style={{ padding: 16 }}
+                      display="block"
+                      variant="h6"
+                      gutterBottom
+                    >
+                      {this.state.id ? "Editar" : "Novo"} tópico
+                    </Typography>
+                  </Grid>
+                  <CardContent>
+                    <Grid item xs={12}>
+                      <TextField name="name" width="20vw" label="Tópico" />
+                    </Grid>
+                    <br></br>
+                    <Grid item xs={12}>
+                      <TextField
+                        name="description"
+                        width="30vw"
+                        label="Descrição"
+                      />
+                    </Grid>
+                    <br></br>
+                    <div className="display-buttons"></div>
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      onClick={this.goToHome}
+                      label="Voltar"
+                      type="button"
+                    />
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      label="Salvar"
+                      type="submit"
+                    />
+                  </CardActions>
+                </Card>
+              </Form>
+            )}
+          </Formik>
+        </Grid>
+      </Grid>
     );
   }
 }

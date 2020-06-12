@@ -1,4 +1,17 @@
-import { React, Link, ToastyUtil, TopicRepo, ButtonIcon } from "./index";
+import {
+  React,
+  TopicRepo,
+  ToastyUtil,
+  ThumbUpIcon,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  Typography,
+  Button,
+  Grid,
+  Redirect,
+} from "./index";
 
 export default class TopicList extends React.Component {
   constructor(props) {
@@ -7,16 +20,20 @@ export default class TopicList extends React.Component {
       id: this.props.id,
       votes: this.props.votes,
       topics: this.props.topics,
+      postedBy: this.props.postedBy,
+      redirect: null,
     };
     this.incrementVote = this.incrementVote.bind(this);
+    this.gotToEditTopic = this.gotToEditTopic.bind(this);
   }
 
   incrementVote(id) {
     TopicRepo.addVote(id).then(
       (res) => {
-        this.setState({ votes: res.data.votes });
+        this.setState({ votes: res.data.__v });
       },
-      () => {
+      (error) => {
+        console.log("error", error);
         ToastyUtil.errorNotify("Erro ao realizar voto.");
       }
     );
@@ -50,26 +67,77 @@ export default class TopicList extends React.Component {
     );
   }
 
+  gotToEditTopic() {
+    this.setState({
+      redirect: `/topics/${this.props.id}?name=${this.props.name}&description=${this.props.description}`,
+    });
+  }
+
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />;
+    }
+
     return (
       <div>
         <ul>
           <li>
-            <div className="card card-shadow">
-              <Link
-                className="card-text"
-                to={`/topics/${this.props.id}?name=${this.props.name}&description=${this.props.description}`}
-              >
-                <h2>{this.props.name}</h2>
-              </Link>
-              <p className="card-text">{this.props.description}</p>
-              <div className="aling-icon">
-                <ButtonIcon className="icon-position " onClick={() => this.incrementVote(this.props.id)} color="#5DC347"iconName="thumb_up"/>
-
-                <p className="vote-counter icon-position">{this.state.votes}</p>
-                <ButtonIcon className="icon-position" onClick={() => this.delete(this.props.id)} color="#FF0000" iconName="delete"/>
-              </div>
-            </div>
+            <Card style={{ width: "25vw" }}>
+              <CardActionArea onClick={this.gotToEditTopic}>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" align="left">
+                    {this.props.name}
+                  </Typography>
+                  <Typography variant="h6" color="textSecondary">
+                    {this.props.description}
+                  </Typography>
+                  <br></br>
+                  <Grid
+                    container
+                    alignItems="flex-start"
+                    justify="flex-end"
+                    direction="row"
+                  >
+                    <div style={{ display: "flex", flex: "auto" }}>
+                      <Typography
+                        align="left"
+                        variant="h5"
+                        color="textSecondary"
+                      >
+                        {this.state.postedBy}
+                      </Typography>
+                    </div>
+                    <div style={{ display: "flex" }}>
+                      <ThumbUpIcon color="primary" />
+                      <Typography style={{ margin: "0 1vw" }}>
+                        {this.state.votes}
+                      </Typography>
+                    </div>
+                  </Grid>
+                </CardContent>
+              </CardActionArea>
+              <CardActions>
+                <Grid
+                  container
+                  alignItems="flex-start"
+                  justify="flex-start"
+                  direction="row"
+                >
+                  <Button
+                    color="primary"
+                    onClick={() => this.incrementVote(this.props.id)}
+                    label="Votar"
+                    type="submit"
+                  />
+                  <Button
+                    color="secondary"
+                    onClick={() => this.delete(this.props.id)}
+                    label="Excluir"
+                    type="submit"
+                  />
+                </Grid>
+              </CardActions>
+            </Card>
           </li>
         </ul>
       </div>

@@ -113,11 +113,8 @@ $ npm start
 ```
 
 ## Setting environment variables.
-### The file which contain all the environment variables is located on the project root.
 
-```
-.env.development
-```
+### In the project root, create a file called ```.env``` and copy the environment variables from the .env.example
 
 ### Declaring a variable: 
 

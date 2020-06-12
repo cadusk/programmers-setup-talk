@@ -1,5 +1,6 @@
 import Repository from "./repository";
 import Axios from "axios";
+import { JWTUtil } from "../utils/jwt";
 
 export default class TopicRepository extends Repository {
 
@@ -9,12 +10,24 @@ export default class TopicRepository extends Repository {
 
     addVote(id) {
         const url = `${this.url}/${id}/voteup`
-        return Axios.post(url);
+        return Axios.post(url,null,
+            {
+                headers: {
+                    user: JSON.stringify(JWTUtil.getUser())
+                }
+            }
+        );
     }
 
     add(data) {
         const url = `${this.url}?name=${data.name}&description=${data.description}`;
-        return Axios.post(url, data);
+        return Axios.post(url, data,
+            { 
+                headers: {
+                    user: JWTUtil.getUser().name
+                }
+            } 
+        );
     }
 
     edit(data) {

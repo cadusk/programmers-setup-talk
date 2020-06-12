@@ -1,4 +1,12 @@
-import { React, TopicList, Redirect, ToastyUtil, TopicRepo, Button } from "./index";
+import {
+  React,
+  TopicList,
+  Redirect,
+  ToastyUtil,
+  TopicRepo,
+  Button,
+} from "./index";
+import { Grid } from "@material-ui/core";
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -20,6 +28,7 @@ export default class Home extends React.Component {
     TopicRepo.get().then(
       (res) => {
         this.setState({ topics: res.data.topics });
+        console.log("te", res);
       },
       () => {
         ToastyUtil.errorNotify("Erro ao consultar tópicos.");
@@ -36,7 +45,6 @@ export default class Home extends React.Component {
   }
 
   render() {
-    
     if (this.state.redirect) {
       return <Redirect to={this.state.redirect} />;
     }
@@ -44,19 +52,32 @@ export default class Home extends React.Component {
     return (
       <div>
         <div className="pos-right">
-          <Button label="Sugerir tópico" onClick={this.gotToTopicForm} type="button" />
-        </div>
-        {this.state.topics.map((topic) => (
-          <TopicList
-            key={`${topic._id}`}
-            onTopicList={this.updateTopics}
-            id={topic._id}
-            name={topic.name}
-            description={topic.description}
-            votes={topic.votes}
-            topics={this.state.topics}
+          <Button
+            color="primary"
+            variant="contained"
+            label="Sugerir tópico"
+            onClick={this.gotToTopicForm}
+            type="button"
           />
-        ))}
+        </div>
+        <div style={{ flexGrow: 1 }}>
+          <Grid container spacing={0}>
+            {this.state.topics.map((topic) => (
+              <Grid key={`Grid-${topic._id}`} item xs={4}>
+                <TopicList
+                  key={`${topic._id}`}
+                  onTopicList={this.updateTopics}
+                  id={topic._id}
+                  name={topic.name}
+                  description={topic.description}
+                  votes={topic.__v}
+                  topics={this.state.topics}
+                  postedBy={topic.posted_by}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </div>
       </div>
     );
   }

@@ -4,17 +4,21 @@ import Home from './pages/home/Home'
 import TopicForm from './pages/topic/form/TopicForm';
 import NavBar from './components/navbar/NavBar';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import Login from './pages/login/Login';
 require('dotenv').config()
 
 export default function App() {
   return (
     <div className="App">
       <Router>
-       <NavBar />
        <Switch>
-        <Route path="/" exact component={Home}/>
-        <Route path="/topics" exact component={TopicForm}/>
-        <Route path="/topics/:id"  component={TopicForm}/>
+        <Route path="/login" exact component={Login}/>
+        <Route >
+            <Route component={NavBar} path="/" />
+            <Route component={Home} exact path="/" />
+            <Route component={TopicForm} exact path="/topics" />
+            <Route component={TopicForm} exact path="/topics/:id"/> 
+        </Route>
       </Switch>  
         </Router>
     </div>
