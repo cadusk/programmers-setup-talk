@@ -4,7 +4,7 @@ import Axios from "axios";
 export default class TopicRepository extends Repository {
 
     constructor(url) {
-        super(`${process.env.REACT_APP_API_URL}/topics`);
+        super(`${process.env.REACT_APP_API_URL}${process.env.REACT_APP_API_PORT}/topics`);
     }
 
     addVote(id) {

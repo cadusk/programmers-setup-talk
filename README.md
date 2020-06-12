@@ -111,3 +111,29 @@ $ cd frontend
 $ npm install
 $ npm start
 ```
+
+## Setting environment variables.
+### The file which contain all the environment variables is located on the project root.
+
+```
+.env.development
+```
+
+### Declaring a variable: 
+
+```
+REACT_APP_VARIABLE_NAME=value
+```
+
+### **The environment variable must begin with REACT_APP, otherwise will be ignored.**
+### Using environment variable: 
+
+```
+process.env.REACT_APP_VARIABLE_NAME
+```
+
+### **If after declaration is not working, consider to stop the application and run it again.**
+
+## Creating a repository.
+### To create a repository go to ```src/repo```.
+### Once created, extend the Repository class and pass the API URL into constructor, then implement only the specific methods in the created repository.
