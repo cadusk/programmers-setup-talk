@@ -3,7 +3,7 @@ import './App.css';
 import Home from './pages/home/Home'
 import TopicForm from './pages/topic/form/TopicForm';
 import NavBar from './components/navbar/NavBar';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route, Redirect, } from 'react-router-dom';
 import Login from './pages/login/Login';
 require('dotenv').config()
 
@@ -18,7 +18,7 @@ export default function App() {
             <Route component={Home} exact path="/" />
             <Route component={TopicForm} exact path="/topics" />
             <Route component={TopicForm} exact path="/topics/:id"/> 
-            <Route path="*" component={Home} />
+            <Redirect from="*" to="/"/>
         </Route>
       </Switch>  
         </Router>
