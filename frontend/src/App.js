@@ -18,6 +18,7 @@ export default function App() {
             <Route component={Home} exact path="/" />
             <Route component={TopicForm} exact path="/topics" />
             <Route component={TopicForm} exact path="/topics/:id"/> 
+            <Route path="*" component={Home} />
         </Route>
       </Switch>  
         </Router>
