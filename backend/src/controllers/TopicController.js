@@ -1,5 +1,4 @@
 const Topic = require('../models/Topic');
-const  mongoose = require('mongoose');
 
 module.exports = {
     async index(request, response) {
@@ -8,15 +7,16 @@ module.exports = {
     },
 
     store (request, response) {
+        const { user } = request.headers;
         const { name, description } = request.query;
         if(!name || !description) {
-            return response.status(400).json({message: 'Parameters name are not correct'})
+            return response.status(400).json({message: 'Parameters are not correct'})
         }
 
         Topic.create({
             name: name,
             description: description,
-            votes: 0
+            posted_by: user
         }).then(newTopic => {
             return response.json(newTopic);
         }).catch(err => {
@@ -35,16 +35,23 @@ module.exports = {
     },
 
     async voteUp(request, response) {
+        const { user } = request.headers
         const { id } = request.params;
+
+        if(!user || !id) {
+            return response.status(400).json({message: 'Parameters are not correct'})
+        }
         const topic = await Topic.findById( { _id: id} );
 
         if(topic){
-            const { votes } = topic;
-            Topic.findOneAndUpdate({_id: id}, {votes: votes+1}, {new: true}).then(res => {
-                return response.json(res);
-            }).catch((error) => {
-                response.status(500).json({ message: error.message});
-                });
+            if(!topic.votes.includes(user)){
+                topic.votes.push(user);
+                await topic.save();
+                return response.json(topic);
+            } else {
+                return response.status(409).json({error: "This user has already voted for this topic"})
+            }
+
         } else {
             response.status(404).json({message: 'This id does not exist'});
         }
