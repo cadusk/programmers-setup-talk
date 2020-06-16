@@ -14,6 +14,7 @@ import {
   CardContent,
   Typography,
   QueryString,
+  Textarea,
 } from "./index";
 
 export default class TopicForm extends React.Component {
@@ -47,28 +48,27 @@ export default class TopicForm extends React.Component {
     }
   }
 
-  putForm(data) {
-    TopicRepo.edit(data).then(
-      () => {
-        ToastyUtil.successNotify("Sugestão editada!");
-        this.goToHome();
-      },
-      () => {
-        ToastyUtil.errorNotify("Erro ao editar sugestão.");
-      }
-    );
+  async putForm(data) {
+    const response = await TopicRepo.edit(data);
+
+    if(!response.hasError) {
+      ToastyUtil.successNotify("Sugestão editada!");
+      this.goToHome();
+    } else {
+      ToastyUtil.errorNotify(response.data);
+    }
   }
 
-  postForm(data) {
-    TopicRepo.add(data).then(
-      () => {
-        ToastyUtil.successNotify("Sugestão salva!");
-        this.goToHome();
-      },
-      () => {
-        ToastyUtil.errorNotify("Erro ao salvar sugestão.");
-      }
-    );
+  async postForm(data) {
+
+    const response = await TopicRepo.add(data);
+
+    if(!response.hasError) {
+      ToastyUtil.successNotify("Sugestão salva!");
+      this.goToHome();
+    } else {
+      ToastyUtil.errorNotify(response.data);
+    }
   }
 
   getValidationSchema() {
@@ -129,31 +129,36 @@ export default class TopicForm extends React.Component {
                   </Grid>
                   <CardContent>
                     <Grid item xs={12}>
-                      <TextField name="name" width="20vw" label="Tópico" />
+                      <TextField name="name" width="30vw" label="Tópico" />
                     </Grid>
                     <br></br>
                     <Grid item xs={12}>
-                      <TextField
-                        name="description"
-                        width="30vw"
-                        label="Descrição"
-                      />
+                    <Textarea name="description" width="30vw" label="Descrição"></Textarea>
                     </Grid>
                     <br></br>
                     <div className="display-buttons"></div>
                   </CardContent>
                   <CardActions>
+                    
                     <Button
                       onClick={this.goToHome}
-                      label="Voltar"
+                      label="Cancelar"
                       type="button"
                     />
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      label="Salvar"
-                      type="submit"
-                    />
+                    <Grid
+                         item
+                         container
+                         alignItems="flex-start"
+                         justify="flex-end"
+                         direction="row"
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        label="Salvar"
+                        type="submit"
+                      />
+                    </Grid>
                   </CardActions>
                 </Card>
               </Form>

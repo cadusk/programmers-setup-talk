@@ -8,13 +8,17 @@ export default class JWT {
   
     setUser(value) {
       this.user = {
-        name: "Gabriel",
+        name: "Usuário 1",
         email: value.email,
       };
     }
   
     getUser() {
       return this.user;
+    }
+
+    removeUser() {
+      this.user = {}
     }
   }
   

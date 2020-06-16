@@ -7,14 +7,29 @@ import {
   IconButton,
   JWTUtil,
   Grid,
+  Button,
+  Redirect
 } from "./index";
 
 export default class NavBar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = JWTUtil.getUser();
+    this.state = {
+      user: JWTUtil.getUser(),
+      redirect: null,
+    };
+
+    this.logout = this.logout.bind(this);
+  }
+
+  logout() {
+    JWTUtil.removeUser();
+    this.setState({ redirect: "/login" });
   }
   render() {
+    if (this.state.redirect) {
+      return <Redirect to={this.state.redirect} />;
+    }
     return (
       <div>
         <AppBar position="static">
@@ -28,7 +43,7 @@ export default class NavBar extends React.Component {
                 />
               </Link>
             </IconButton>
-            <div></div>
+
             <Grid
               container
               alignItems="flex-start"
@@ -36,7 +51,16 @@ export default class NavBar extends React.Component {
               direction="row"
               style={{ margin: "0 1vw" }}
             >
-              <Typography align="right">{this.state.email}</Typography>
+              <Grid item className="margin-top">
+                <Typography >{this.state.user.email}</Typography>
+              </Grid>
+              <Grid item>
+                <Button
+                  onClick={this.logout}
+                  className="button-nav"
+                  label="Logout"
+                />
+              </Grid>
             </Grid>
           </Toolbar>
         </AppBar>

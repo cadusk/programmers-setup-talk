@@ -27,16 +27,13 @@ export default class TopicList extends React.Component {
     this.gotToEditTopic = this.gotToEditTopic.bind(this);
   }
 
-  incrementVote(id) {
-    TopicRepo.addVote(id).then(
-      (res) => {
-        this.setState({ votes: res.data.__v });
-      },
-      (error) => {
-        console.log("error", error);
-        ToastyUtil.errorNotify("Erro ao realizar voto.");
-      }
-    );
+  async incrementVote(id) {
+    const response = await TopicRepo.addVote(id);
+    if(!response.hasError) {
+      this.setState({ votes: response.data.__v });
+    }else {
+      ToastyUtil.errorNotify(response.data);
+    }
   }
 
   updateTopicList() {
@@ -55,16 +52,13 @@ export default class TopicList extends React.Component {
     this.updateTopicList();
   }
 
-  delete(id) {
-    TopicRepo.remove(id).then(
-      () => {
-        ToastyUtil.successNotify("Exclusão realizada!");
-        this.removeTopicFromState(id);
-      },
-      () => {
-        ToastyUtil.errorNotify("Erro ao realizar exclusão.");
-      }
-    );
+  async delete(id) {
+    const response = await TopicRepo.remove(id);
+     if (!response.hasError) {
+       this.removeTopicFromState(id);
+     } else {
+       ToastyUtil.errorNotify(response.data)
+     }
   }
 
   gotToEditTopic() {
@@ -82,14 +76,14 @@ export default class TopicList extends React.Component {
       <div>
         <ul>
           <li>
-            <Card style={{ width: "25vw" }}>
+            <Card >
               <CardActionArea onClick={this.gotToEditTopic}>
                 <CardContent>
-                  <Typography gutterBottom variant="h5" align="left">
-                    {this.props.name}
+                  <Typography  gutterBottom variant="h5" align="left">
+                    Título: {this.props.name}
                   </Typography>
-                  <Typography variant="h6" color="textSecondary">
-                    {this.props.description}
+                  <Typography variant="subtitle1" color="textSecondary">
+                    Descrição: {this.props.description}
                   </Typography>
                   <br></br>
                   <Grid
@@ -101,10 +95,10 @@ export default class TopicList extends React.Component {
                     <div style={{ display: "flex", flex: "auto" }}>
                       <Typography
                         align="left"
-                        variant="h5"
+                        variant="h6"
                         color="textSecondary"
                       >
-                        {this.state.postedBy}
+                       Sugerido por: {this.state.postedBy}
                       </Typography>
                     </div>
                     <div style={{ display: "flex" }}>

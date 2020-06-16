@@ -5,7 +5,7 @@ import { Button as MatButton } from '@material-ui/core';
 export default class Button extends React.Component {
     render() {
         return (
-            <div>
+            <div className={this.props.className}>
                 <MatButton onClick={this.props.onClick} 
                 size={this.props.size}
                 type={this.props.type}

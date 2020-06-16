@@ -12,3 +12,11 @@ nav {
       left: 20%;
     }
   
+.button-nav > button > span {
+  color:white
+}
+
+.margin-top {
+  margin-top: 5px !important;
+}
+

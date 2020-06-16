@@ -5,8 +5,11 @@ import {
   ToastyUtil,
   TopicRepo,
   Button,
+  Formik,
+  Form,
+  Grid,
+  TextField
 } from "./index";
-import { Grid } from "@material-ui/core";
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -40,6 +43,7 @@ export default class Home extends React.Component {
     this.setState({ redirect: "/topics/" });
   }
 
+  search(value) { }
   updateTopics(topics) {
     this.setState({ topics: topics });
   }
@@ -60,6 +64,38 @@ export default class Home extends React.Component {
             type="button"
           />
         </div>
+        <Grid container>
+          <Formik
+            initialValues={{ topic: "" }}
+            onSubmit={(this.values, this.search)}
+          >
+            <Form>
+              <Grid container direction="row" spacing={3}>
+                <div style={{ marginLeft: "3.7vw" }}>
+                  <Grid item>
+                    <TextField
+                      label="Tópico"
+                      variant="outlined"
+                      width="20vw"
+                      name="topic"
+                    />
+                  </Grid>
+                  <br></br>
+                  <Grid item>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      label="Pesquisar"
+                      type="submit"
+                    />
+                  </Grid>
+                </div>
+              </Grid>
+            </Form>
+          </Formik>
+        </Grid>
+        <br></br>
+
         <div style={{ flexGrow: 1 }}>
           <Grid container spacing={0}>
             {this.state.topics.map((topic) => (

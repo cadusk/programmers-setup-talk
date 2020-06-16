@@ -10,29 +10,73 @@ export default class TopicRepository extends Repository {
 
     addVote(id) {
         const url = `${this.url}/${id}/voteup`
+        let response = {
+            data: "",
+            hasError: false
+        }
         return Axios.post(url,null,
             {
                 headers: {
-                    user: JSON.stringify(JWTUtil.getUser())
+                    user: JWTUtil.getUser().email
                 }
             }
-        );
+        ).then(
+            (res) => {
+                response.data = res.data
+                return response;
+            },
+            (error) => {
+            if(error.response.data.error) {
+                response.data = error.response.data.error;
+            }else {
+                response.data = error.response.data.message;
+            }
+                response.hasError = true;
+                return response;
+            }
+          );;
     }
 
     add(data) {
         const url = `${this.url}?name=${data.name}&description=${data.description}`;
+        const response = {hasError: false, data: ""}
+
         return Axios.post(url, data,
             { 
                 headers: {
-                    user: JWTUtil.getUser().name
+                    user: JWTUtil.getUser().email
                 }
             } 
-        );
+        ).then(
+            () => {
+                return response;
+            },
+            (error) => {
+                if(error.response.data) {
+                    response.data = error.response.data.message
+                }
+                response.hasError = true;
+                return response;
+            }
+          );
     }
 
     edit(data) {
         const url = `${this.url}/${data.id}`;
-        return Axios.patch(url, data);
+        const response = {hasError: false, data: ""}
+        
+        return Axios.patch(url, data).then(
+            () => {
+                return response;
+            },
+            (error) => {
+                if(error.response.data) {
+                    response.data = error.response.data.message
+                }
+                response.hasError = true;
+                return response;
+            }
+          );
     }
 }
 
