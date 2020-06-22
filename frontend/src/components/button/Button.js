@@ -1,14 +1,19 @@
 import React from 'react'
 import './Button.css'
-
+import { Button as MatButton } from '@material-ui/core';
 
 export default class Button extends React.Component {
     render() {
         return (
-            <div>
-                <button className="btn btn-submit btn-margin-left" onClick={this.props.onClick} type={this.props.type}>
+            <div className={this.props.className}>
+                <MatButton onClick={this.props.onClick} 
+                size={this.props.size}
+                type={this.props.type}
+                variant={this.props.variant} color={this.props.color}
+                href={this.props.href}
+                >
                     {this.props.label}
-                </button>
+                </MatButton>
             </div>
         )
     }

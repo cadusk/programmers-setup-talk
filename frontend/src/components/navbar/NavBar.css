@@ -9,13 +9,14 @@ nav {
 
   .logo {
       position: relative;
-      right: 5%;
+      left: 20%;
     }
   
-  .nav-links {
-    width: 40%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    list-style: none;
-  }
+.button-nav > button > span {
+  color:white
+}
+
+.margin-top {
+  margin-top: 5px !important;
+}
+

@@ -27,6 +27,19 @@ export default class Repository {
 
     remove(id, optionalUrl = null) {
         const url = optionalUrl ? optionalUrl : `${this.url}/${id}`;
-        return Axios.delete(url);
+        const response = { hasError: false, data: ""}
+        return Axios.delete(url).then(
+            () => {
+                return response;
+             },
+            (error) => {
+                if(error.response.data) {
+                    response.data = error.response.data.message;
+                }
+                response.hasError = true;
+                return response;
+
+            }
+          );;
     }
 }

@@ -1,5 +1,20 @@
-import { 
-  React, Redirect, ToastyUtil, TopicRepo, Yup, Form, Formik,TextField, Button, QueryString
+import {
+  React,
+  Redirect,
+  ToastyUtil,
+  TopicRepo,
+  Yup,
+  Form,
+  Formik,
+  TextField,
+  Button,
+  Grid,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+  QueryString,
+  Textarea,
 } from "./index";
 
 export default class TopicForm extends React.Component {
@@ -25,7 +40,6 @@ export default class TopicForm extends React.Component {
 
   handleSubmit(values) {
     let topic = values;
-
     if (this.state.id) {
       topic.id = this.state.id;
       this.putForm(topic);
@@ -34,28 +48,27 @@ export default class TopicForm extends React.Component {
     }
   }
 
-  putForm(data) {
-    TopicRepo.edit(data).then(
-      () => {
-        ToastyUtil.successNotify("Sugestão editada!");
-        this.goToHome();
-      },
-      () => {
-        ToastyUtil.errorNotify("Erro ao editar sugestão.");
-      }
-    );
+  async putForm(data) {
+    const response = await TopicRepo.edit(data);
+
+    if(!response.hasError) {
+      ToastyUtil.successNotify("Sugestão editada!");
+      this.goToHome();
+    } else {
+      ToastyUtil.errorNotify(response.data);
+    }
   }
 
-  postForm(data) {
-    TopicRepo.add(data).then(
-      () => {
-        ToastyUtil.successNotify("Sugestão salva!");
-        this.goToHome();
-      },
-      () => {
-        ToastyUtil.errorNotify("Erro ao salvar sugestão.");
-      }
-    );
+  async postForm(data) {
+
+    const response = await TopicRepo.add(data);
+
+    if(!response.hasError) {
+      ToastyUtil.successNotify("Sugestão salva!");
+      this.goToHome();
+    } else {
+      ToastyUtil.errorNotify(response.data);
+    }
   }
 
   getValidationSchema() {
@@ -88,27 +101,71 @@ export default class TopicForm extends React.Component {
     }
 
     return (
-      <Formik
-        initialValues={this.getFormInitialValues()}
-        validationSchema={this.getValidationSchema()}
-        onSubmit={(this.values, this.handleSubmit)}
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justify="center"
+        style={{ minHeight: "80vh" }}
       >
-        {() => (
-          <Form>
-            <div>
-              <div className="form-grid">
-                <TextField  name="name" label="Tópico" />
-                <TextField name="description" label="Descrição" />
-              </div>
-            </div>
-            <br></br>
-            <div className="display-buttons">
-              <Button onClick={this.goToHome} label="Voltar" type="button"/>
-              <Button label="Salvar" type="submit"/>
-            </div>
-          </Form>
-        )}
-      </Formik>
+        <Grid item xs={12}>
+          <Formik
+            initialValues={this.getFormInitialValues()}
+            validationSchema={this.getValidationSchema()}
+            onSubmit={(this.values, this.handleSubmit)}
+          >
+            {() => (
+              <Form>
+                <Card>
+                  <Grid container>
+                    <Typography
+                      style={{ padding: 16 }}
+                      display="block"
+                      variant="h6"
+                      gutterBottom
+                    >
+                      {this.state.id ? "Editar" : "Novo"} tópico
+                    </Typography>
+                  </Grid>
+                  <CardContent>
+                    <Grid item xs={12}>
+                      <TextField name="name" width="30vw" label="Tópico" />
+                    </Grid>
+                    <br></br>
+                    <Grid item xs={12}>
+                    <Textarea name="description" width="30vw" label="Descrição"></Textarea>
+                    </Grid>
+                    <br></br>
+                    <div className="display-buttons"></div>
+                  </CardContent>
+                  <CardActions>
+                    
+                    <Button
+                      onClick={this.goToHome}
+                      label="Cancelar"
+                      type="button"
+                    />
+                    <Grid
+                         item
+                         container
+                         alignItems="flex-start"
+                         justify="flex-end"
+                         direction="row"
+                    >
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        label="Salvar"
+                        type="submit"
+                      />
+                    </Grid>
+                  </CardActions>
+                </Card>
+              </Form>
+            )}
+          </Formik>
+        </Grid>
+      </Grid>
     );
   }
 }
